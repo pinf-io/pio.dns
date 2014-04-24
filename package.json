@@ -1,0 +1,15 @@
+{
+  "name": "pio.dns",
+  "version": "0.0.0",
+  "pm": "npm",
+  "dependencies": {
+    "q": "~0.9.7",
+    "aws-sdk": "~2.0.0-rc9",
+    "request": "~2.34.0"
+  },
+  "config": {
+      "pio.deploy.converter": {
+          "name": "nodejs-lib"
+      }
+  }
+}
