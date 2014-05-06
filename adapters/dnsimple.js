@@ -51,10 +51,11 @@ adapter.prototype.ensure = function(records) {
 				domains.forEach(function(domain) {
 					if (domainId) return;
 					domain = domain.domain;
-					if (
-						record.domain === domain.name ||
-						record.domain.substring(record.domain.length-domain.name.length-1) === "." + domain.name
-					) {
+					if (record.domain === domain.name) {
+						domainId = domain.id;
+						record.name = "";
+					} else
+					if (record.domain.substring(record.domain.length-domain.name.length-1) === "." + domain.name) {
 						domainId = domain.id;
 						record.name = record.name.replace(new RegExp("\\." + domain.name + "$"), "");
 					}

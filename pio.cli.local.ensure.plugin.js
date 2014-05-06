@@ -151,7 +151,7 @@ exports.ensure = function(pio, state) {
                     return;
                 }
 
-               try {
+                try {
                     var re = new RegExp("\\n" + state["pio.vm"].ip + "\\s+" + state["pio"].hostname + "\\s*\\n");
                     if (re.test(pio.API.FS.readFileSync("/etc/hosts", "utf8"))) {
                         console.log(("WARNING: Found entry related to hostname '" + state["pio"].hostname + "' in '/etc/hosts'!").red);
