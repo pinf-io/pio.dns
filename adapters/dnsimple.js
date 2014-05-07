@@ -51,11 +51,7 @@ adapter.prototype.ensure = function(records) {
 				domains.forEach(function(domain) {
 					if (domainId) return;
 					domain = domain.domain;
-					if (record.domain === domain.name) {
-						domainId = domain.id;
-						record.name = "";
-					} else
-					if (record.domain.substring(record.domain.length-domain.name.length-1) === "." + domain.name) {
+					if (record.domain === domain.name || record.domain.substring(record.domain.length-domain.name.length-1) === "." + domain.name) {
 						domainId = domain.id;
 						record.name = record.name.replace(new RegExp("\\." + domain.name + "$"), "");
 					}
@@ -73,7 +69,12 @@ adapter.prototype.ensure = function(records) {
 				done = Q.when(done, function() {
 					return self._api.call("GET", "/domains/" + domainId + "/records").then(function(existingRecords) {
 						var done = Q.resolve();
-						recordsByDomainId[domainId].filter(function(record) {
+						recordsByDomainId[domainId].map(function(record) {
+							if (record.type === "A") {
+								record.name = "";
+							}
+							return record;
+						}).filter(function(record) {
 							return (existingRecords.filter(function(existingRecord) {
 								existingRecord = existingRecord.record;
 								if (

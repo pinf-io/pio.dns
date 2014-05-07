@@ -54,34 +54,34 @@ exports.deploy = function(pio, state) {
         });
 
         return Q.all(all).then(function() {
-
-            for (var name in records) {
-                if (records[name].type === "A") {
+            records = records.filter(function(record) {
+                if (record.type === "A") {
                     if (
-                        response.resolving[name] &&
-                        response.resolving[name][0] === records[name].data
+                        response.resolving[record.name] &&
+                        response.resolving[record.name][0] === record.data
                     ) {
                         // Record is resolving.
-                        delete records[name];
+                        return false;
                     }
                 } else
-                if (records[name].type === "CNAME") {
+                if (record.type === "CNAME") {
                     // TODO: We should be checking all records here for all services, not just for our one service.
-                    if (!response.declared[records[name].data]) {
-                        throw new Error("CNAME '" + records[name].data + "' must be declared in records!");
+                    if (!response.declared[record.data]) {
+                        throw new Error("CNAME '" + record.data + "' must be declared in records!");
                     }
                     // TODO: Allow multiple layers of CNAMES until reaching an A record.
                     if (
-                        response.resolving[records[name].data] &&
-                        response.resolving[records[name].data][0] === response.declared[records[name].data].data
+                        response.resolving[record.name] &&
+                        response.resolving[record.name][0] === response.declared[record.data].data
                     ) {
                         // Record is resolving.
-                        delete records[name];
+                        return false;
                     }
                 } else {
-                    throw new Error("Unrecognized record type '" + records[name].type + "' for record: " + JSON.stringify(records[name]));
+                    throw new Error("Unrecognized record type '" + record.type + "' for record: " + JSON.stringify(record));
                 }
-            }
+                return true;
+            });
 
             return pio.API.Q.all(all).then(function() {
                 if (Object.keys(records).length === 0) {
