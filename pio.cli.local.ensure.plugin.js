@@ -93,13 +93,23 @@ exports.ensure = function(pio, state) {
 
                 function isOurs() {
                     var deferred = Q.defer();
+                    var url = "http://" + state["pio"].hostname + ":" + state["pio.services"].services["pio.server"].descriptor.env.PORT + "/.instance-id/" + state["pio"].instanceId;
                     REQUEST({
                         method: "POST",
-                        url: "http://" + state["pio"].hostname + ":" + state["pio.services"].services["pio.server"].descriptor.env.PORT + "/.instance-id/" + state["pio"].instanceId,
+                        url: url,
                         timeout: 1 * 1000
                     }, function(err, res, body) {
                         if (err) {
-                            console.error("Warning: Error while checking if instance is ours:", err.stack);
+                            var message = [
+                                "Error while checking if instance is ours by calling '" + url + "'.",
+                                "Hostname is likely not resolving to the IP of our server!",
+                                "To see what the hostname resolves to use: http://cachecheck.opendns.com/"
+                            ].join("\n").red;
+                            if (err.code === "ESOCKETTIMEDOUT") {
+                                console.error("Warning: TIMEOUT " + message, err.stack);
+                            } else {
+                                console.error("Warning: " + message, err.stack);
+                            }
                             return deferred.resolve(false);
                         }
                         if (res.statusCode === 204) {
