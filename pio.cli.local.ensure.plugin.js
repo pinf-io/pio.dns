@@ -102,8 +102,16 @@ exports.ensure = function(pio, state) {
                         if (err) {
                             var message = [
                                 "Error while checking if instance is ours by calling '" + url + "'.",
-                                "Hostname is likely not resolving to the IP of our server!",
-                                "To see what the hostname resolves to use: http://cachecheck.opendns.com/"
+                                "Hostname '" + state["pio"].hostname + "' is likely not resolving to the IP '" + state["pio.vm"].ip + "' of our server!",
+                                "To see what the hostname resolves to use: http://cachecheck.opendns.com/",
+                                "You can use http://opendns.com/ (which refreshes fast) for your DNS servers:",
+                                "  208.67.222.222",
+                                "  208.67.220.220",
+                                "Then flush your local DNS cache:",
+                                " sudo killall -HUP mDNSResponder",
+                                " sudo dscacheutil -flushcache",
+                                "TODO: Why does running the above command not immediately flush the DNS cache even though the host resolves correctly on opendns?",
+                                "TODO: Insert a temporary entry into the /etc/hosts. We need a sudo/root daemon first."
                             ].join("\n").red;
                             if (err.code === "ESOCKETTIMEDOUT") {
                                 console.error("Warning: TIMEOUT " + message, err.stack);
