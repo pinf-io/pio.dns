@@ -29,8 +29,16 @@ exports.ensure = function(pio, state) {
             return;
         }
 
+        if (!pio.getConfig("config")["pio.dns"].adapters || Object.keys(pio.getConfig("config")["pio.dns"].adapters).filter(function(adapter) {
+            return (!!pio.getConfig("config")["pio.dns"].adapters[adapter]);
+        }).length === 0) {
+            // No adapters configured.
+            ready = true;
+        }
+
         if (ready) {
-            response.status = "ready";
+            response.required = false;
+            response.status = "na";
             return;
         }
 
