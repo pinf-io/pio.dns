@@ -205,7 +205,11 @@ exports.ensure = function(pio, state) {
                     var adapter = require("./adapters/" + name);
                     var adapter = new adapter.adapter(settings);
                     console.log(("Provisioning DNS records using adapter '" + name + "': " + JSON.stringify(records, null, 4)).magenta);
-                    return adapter.ensure(records);
+                    return adapter.ensure(records).fail(function(err) {
+                        err.mesage += " (while provisioning DNS using settings '" + JSON.stringify(settings) + "')";
+                        err.stack += "\n(while provisioning DNS using settings '" + JSON.stringify(settings) + "')";
+                        throw err;
+                    });
                 }
 
                 var all = [];
