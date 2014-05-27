@@ -203,6 +203,12 @@ exports.ensure = function(pio, state) {
 
                     // TODO: Use `require.async`.
                     var adapter = require("./adapters/" + name);
+                    if (!adapter) {
+                        console.error("ERROR: Could not load adapter '" + "./adapters/" + name + "'!");
+                    }
+                    if (!adapter.adapter) {
+                        console.error("ERROR: Adapter '" + "./adapters/" + name + "' does not export 'adapter.adapter'!");
+                    }
                     var adapter = new adapter.adapter(settings);
                     console.log(("Provisioning DNS records using adapter '" + name + "': " + JSON.stringify(records, null, 4)).magenta);
                     return adapter.ensure(records).fail(function(err) {
