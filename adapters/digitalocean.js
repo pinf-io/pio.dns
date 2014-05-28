@@ -41,12 +41,22 @@ adapter.prototype.ensure = function(records) {
 		records.forEach(function(record) {
 			var domainId = null;
 			domains.forEach(function(domain) {
+				if (domain.error) {
+					console.error("DNS error for '" + domain.name + "':", domain.error);
+				}
+				if (domain.zone_file_with_error) {
+					console.error("DNS zone file error for '" + domain.name + "':", domain.zone_file_with_error);
+				}
 				if (domainId) return;
 				if (record.domain === domain.name) {
 					domainId = domain.id;
-				}
-				if (record.type === "CNAME") {
-					record.data += ".";
+					record.name = record.name.replace(new RegExp("\\." + domain.name + "$"), "");
+					if (record.type === "A" && record.domain == record.name) {
+						record.name = "@";
+					}				
+					if (record.type === "CNAME") {
+						record.data += ".";
+					}
 				}
 			});
 			if (!domainId) {
