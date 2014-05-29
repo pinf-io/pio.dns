@@ -190,6 +190,11 @@ exports.ensure = function(pio, state) {
                     console.error(err.stack);
                 }
 
+                if (state["pio.dns"] && state["pio.dns"].skip && state["pio.dns"].skip.indexOf("provision") !== -1) {
+                    // We are being asked to skip DNS provisioning.
+                    console.log("Skip DNS provisioning");
+                    return;
+                }
 
                 function ensureWithAdapter(name, settings) {
                     if (!settings) return Q.resolve();
