@@ -29,6 +29,8 @@ exports.deploy = function(pio, state) {
         var records = state['pio.services'].services[state['pio.service'].id].descriptor['config.plugin']['pio.dns'].records;
         // TODO: This should already be done when we get the config from the abstracted API above.
         records = JSON.stringify(records);
+        records = records.replace(/\{\{config\.pio\.domain\}\}/g, state['pio'].domain);
+        records = records.replace(/\{\{config\.pio\.hostname\}\}/g, state['pio'].hostname);
         records = records.replace(/\{\{config\['pio\.vm'\]\.ip\}\}/g, state['pio.vm'].ip);
         records = JSON.parse(records);
 
