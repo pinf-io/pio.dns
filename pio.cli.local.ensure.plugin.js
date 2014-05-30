@@ -17,7 +17,7 @@ exports.ensure = function(pio, state) {
     var response = {
         declared: {},
         resolving: {},
-        status: "unknown"
+        ".status": "unknown"
     };
 
     return pio.API.Q.fcall(function() {
@@ -38,7 +38,7 @@ exports.ensure = function(pio, state) {
 
         if (ready) {
             response.required = false;
-            response.status = "na";
+            response[".status"] = "na";
             return;
         }
 
@@ -87,13 +87,13 @@ exports.ensure = function(pio, state) {
                 }
                 if (diff === 0) {
                     ready = true;
-                    response.status = "ready";
+                    response[".status"] = "ready";
                 } else {
                     response.required = false;
-                    response.status = "pending";
+                    response[".status"] = "pending";
                 }
             }).then(function() {
-                if (response.status === "ready") {
+                if (response[".status"] === "ready") {
                     return;
                 }
 
@@ -148,7 +148,7 @@ exports.ensure = function(pio, state) {
                             if (ip !== state["pio.vm"].ip) {
                                 console.log(("Looks like hostname '" + state["pio"].hostname + "' is resolving to '" + ip + "' while cached runtime IP is '" + state["pio.vm"].ip + "'. You should never get here.").red);
                             }
-                            response.status == "pending";
+                            response[".status"] == "pending";
                             return;
                         }
 
@@ -162,18 +162,18 @@ exports.ensure = function(pio, state) {
                             }
                         }).then(function() {
 
-                            response.status = "repeat";
+                            response[".status"] = "repeat";
                             return;
                         });
                     }
                 });
 
             }).then(function() {
-                if (response.status === "ready" || response.status === "repeat") {
+                if (response[".status"] === "ready" || response[".status"] === "repeat") {
                     return;
                 }
                 if (!state["pio.vm"].ip) {
-                    response.status = "repeat";
+                    response[".status"] = "repeat";
                     return;
                 }
 
@@ -182,7 +182,7 @@ exports.ensure = function(pio, state) {
                     if (re.test(pio.API.FS.readFileSync("/etc/hosts", "utf8"))) {
                         console.log(("WARNING: Found entry related to hostname '" + state["pio"].hostname + "' in '/etc/hosts'!").red);
 
-                        response.status = "ready";
+                        response[".status"] = "ready";
                         return;
                     }
                 } catch(err) {

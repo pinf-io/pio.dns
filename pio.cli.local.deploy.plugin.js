@@ -13,7 +13,7 @@ exports.deploy = function(pio, state) {
     var response = {
         declared: {},
         resolving: {},
-        status: "unknown"
+        ".status": "unknown"
     };
 
     return pio.API.Q.fcall(function() {
@@ -85,7 +85,7 @@ exports.deploy = function(pio, state) {
 
             return pio.API.Q.all(all).then(function() {
                 if (Object.keys(records).length === 0) {
-                    response.status = "ready";
+                    response[".status"] = "ready";
                     return;
                 }
 
