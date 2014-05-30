@@ -5,6 +5,7 @@ const Q = require("q");
 const REQUEST = require("request");
 const AWS = require("aws-sdk");
 
+// http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html
 
 var adapter = exports.adapter = function(settings) {
 

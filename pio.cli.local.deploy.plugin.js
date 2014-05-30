@@ -69,7 +69,10 @@ exports.deploy = function(pio, state) {
                 if (record.type === "CNAME") {
                     // TODO: We should be checking all records here for all services, not just for our one service.
                     if (!response.declared[record.data]) {
-                        throw new Error("CNAME '" + record.data + "' must be declared in records!");
+
+                        // NOTE: For now we just assume CNAME records are not resolving.
+                        return true;
+//                        throw new Error("CNAME '" + record.data + "' must be declared in records!");
                     }
                     // TODO: Allow multiple layers of CNAMES until reaching an A record.
                     if (
