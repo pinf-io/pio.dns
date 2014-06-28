@@ -4,7 +4,7 @@
   "pm": "npm",
   "dependencies": {
     "q": "~0.9.7",
-    "aws-sdk": "~2.0.0-rc9",
+    "aws-sdk": "~2.0.4",
     "request": "~2.34.0",
     "digitalocean-api": "~0.1.1",
     "waitfor": "~0.1.3",
