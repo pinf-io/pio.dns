@@ -15,12 +15,10 @@ var adapter = exports.adapter = function(settings) {
 
 	ASSERT.equal(typeof self._settings.accessKeyId, "string");
 	ASSERT.equal(typeof self._settings.secretAccessKey, "string");
-	ASSERT.equal(typeof self._settings.region, "string");
 
     var awsConfig = new AWS.Config({
 		accessKeyId: self._settings.accessKeyId,
-		secretAccessKey: self._settings.secretAccessKey,
-        region: self._settings.region
+		secretAccessKey: self._settings.secretAccessKey
     });
 
 	self._api = {
