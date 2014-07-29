@@ -121,7 +121,10 @@ exports.ensure = function(pio, state) {
                                 "TODO: Why does running the above command not immediately flush the DNS cache even though the host resolves correctly on opendns?",
                                 "TODO: Insert a temporary entry into the /etc/hosts. We need a sudo/root daemon first."
                             ].join("\n").red;
-                            if (err.code === "ESOCKETTIMEDOUT") {
+                            if (
+                                err.code === "ESOCKETTIMEDOUT" ||
+                                err.code === "ETIMEDOUT"
+                            ) {
                                 console.error("Warning: TIMEOUT " + message, err.stack);
                             } else {
                                 console.error("Warning: " + message, err.stack);
