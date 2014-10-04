@@ -108,7 +108,11 @@ adapter.prototype.ensure = function(records) {
 					if ((record.domain + ".") === domain.name || (record.domain.substring(record.domain.length-domain.name.length-1) + ".") === "." + domain.name) {
 						domainId = domain.name;
 						if (record.type === "CNAME") {
-							record.data = record.data.replace(new RegExp("\\." + record.domain + "$"), "");
+							if (new RegExp("\\." + record.domain + "$").test(record.data)) {
+								record.data = record.data.replace(new RegExp("\\." + record.domain + "$"), "");
+							} else {
+								record.data += ".";
+							}
 						}
 					}
 				});
