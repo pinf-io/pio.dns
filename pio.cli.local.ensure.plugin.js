@@ -62,6 +62,8 @@ exports.ensure = function(pio, state) {
             var all = [];
             records = Object.keys(records).map(function(name) {
                 response.declared[name] = records[name];
+                // TODO: When option is set verify that resolving hostname
+                //       is of the same record type (and other criteria as declared).
                 all.push(lookup(name).then(function(ips) {
                     response.resolving[name] = normalizeIPs(ips);
                 }));                
